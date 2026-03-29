@@ -60,8 +60,6 @@ const app = new Elysia()
     return response;
   })
 
-  // --- AUTH ROUTES ---
-
   .get("/auth/login", ({ redirect }) => {
     const oauth2Client = createOAuthClient();
     const url = getAuthUrl(oauth2Client);
