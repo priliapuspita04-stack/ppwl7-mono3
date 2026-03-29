@@ -5,10 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 
-// ❌ DIHAPUS karena tidak dipakai
-// import { Separator } from "@/components/ui/separator"
-// import { ScrollArea } from "@/components/ui/scroll-area"
-
 // ✅ BASE URL DARI ENV
 const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -66,12 +62,14 @@ function CourseWorkCard({ item }: { item: CourseWorkWithSubmission }) {
       <CardContent>
         {courseWork.description}
 
-        {/* ✅ SEKALIAN DIPAKAI biar nggak useless */}
-        {submission?.attachments?.map((att, i) => (
-          <div key={i}>
-            <AttachmentLink att={att} />
-          </div>
-        ))}
+        {/* ✅ FIX DI SINI */}
+        {submission?.assignmentSubmission?.attachments?.map(
+          (att: SubmissionAttachmentItem, i: number) => (
+            <div key={i}>
+              <AttachmentLink att={att} />
+            </div>
+          )
+        )}
       </CardContent>
     </Card>
   )
