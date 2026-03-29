@@ -4,6 +4,11 @@ import type { Course, CourseWorkWithSubmission, SubmissionAttachmentItem } from 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+
+// ❌ DIHAPUS karena tidak dipakai
+// import { Separator } from "@/components/ui/separator"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+
 // ✅ BASE URL DARI ENV
 const BASE_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -33,6 +38,16 @@ function stateLabel(state?: string) {
 // Attachment
 // ─────────────────────────────────────────────
 
+function AttachmentLink({ att }: { att: SubmissionAttachmentItem }) {
+  if (att.driveFile) {
+    return <a href={att.driveFile.alternateLink} target="_blank">📄 {att.driveFile.title}</a>
+  }
+  if (att.link) {
+    return <a href={att.link.url} target="_blank">🔗 {att.link.title}</a>
+  }
+  return null
+}
+
 // ─────────────────────────────────────────────
 // Card
 // ─────────────────────────────────────────────
@@ -50,6 +65,13 @@ function CourseWorkCard({ item }: { item: CourseWorkWithSubmission }) {
       </CardHeader>
       <CardContent>
         {courseWork.description}
+
+        {/* ✅ SEKALIAN DIPAKAI biar nggak useless */}
+        {submission?.attachments?.map((att, i) => (
+          <div key={i}>
+            <AttachmentLink att={att} />
+          </div>
+        ))}
       </CardContent>
     </Card>
   )
