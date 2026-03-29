@@ -32,27 +32,6 @@ function stateLabel(state?: string) {
   return map[state ?? ""] ?? { label: state ?? "–", variant: "outline" }
 }
 
-// ─────────────────────────────────────────────
-// Attachment
-// ─────────────────────────────────────────────
-
-function AttachmentLink({ att }: { att: SubmissionAttachmentItem }) {
-  if (att.driveFile) {
-    return (
-      <a href={att.driveFile.alternateLink} target="_blank" rel="noreferrer">
-        📄 {att.driveFile.title}
-      </a>
-    )
-  }
-  if (att.link) {
-    return (
-      <a href={att.link.url} target="_blank" rel="noreferrer">
-        🔗 {att.link.title}
-      </a>
-    )
-  }
-  return null
-}
 
 // ─────────────────────────────────────────────
 // Card
@@ -62,10 +41,6 @@ function CourseWorkCard({ item }: { item: CourseWorkWithSubmission }) {
   const { courseWork, submission } = item
   const { label, variant } = stateLabel(submission?.state)
 
-  // ✅ FIX: ambil attachments dengan SAFE ACCESS (biar TS nggak error)
-  const attachments =
-    (submission as any)?.assignmentSubmission?.attachments ?? []
-
   return (
     <Card>
       <CardHeader>
@@ -73,20 +48,8 @@ function CourseWorkCard({ item }: { item: CourseWorkWithSubmission }) {
         <Badge variant={variant}>{label}</Badge>
         <CardDescription>{formatDueDate(courseWork.dueDate)}</CardDescription>
       </CardHeader>
-
       <CardContent>
         {courseWork.description}
-
-        {/* ✅ Attachments */}
-        {attachments.length > 0 && (
-          <div style={{ marginTop: "10px" }}>
-            {attachments.map((att: SubmissionAttachmentItem, i: number) => (
-              <div key={i}>
-                <AttachmentLink att={att} />
-              </div>
-            ))}
-          </div>
-        )}
       </CardContent>
     </Card>
   )
