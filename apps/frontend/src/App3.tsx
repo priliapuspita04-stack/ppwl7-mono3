@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { Course, CourseWorkWithSubmission, SubmissionAttachmentItem } from "shared"
+import type { Course, CourseWorkWithSubmission } from "shared"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
