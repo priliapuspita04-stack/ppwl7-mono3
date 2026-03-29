@@ -1,6 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import DefaultApp from "./App2";
-import ClassroomApp from "./App3";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DefaultApp from './App2';
+import ClassroomApp from './App3';
 
 function App() {
   return (
