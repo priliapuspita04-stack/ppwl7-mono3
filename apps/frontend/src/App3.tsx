@@ -15,7 +15,9 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL
 function formatDueDate(dueDate?: { year: number; month: number; day: number }) {
   if (!dueDate) return "Tidak ada deadline"
   return new Date(dueDate.year, dueDate.month - 1, dueDate.day).toLocaleDateString("id-ID", {
-    day: "numeric", month: "long", year: "numeric",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   })
 }
 
@@ -36,10 +38,18 @@ function stateLabel(state?: string) {
 
 function AttachmentLink({ att }: { att: SubmissionAttachmentItem }) {
   if (att.driveFile) {
-    return <a href={att.driveFile.alternateLink} target="_blank">📄 {att.driveFile.title}</a>
+    return (
+      <a href={att.driveFile.alternateLink} target="_blank" rel="noreferrer">
+        📄 {att.driveFile.title}
+      </a>
+    )
   }
   if (att.link) {
-    return <a href={att.link.url} target="_blank">🔗 {att.link.title}</a>
+    return (
+      <a href={att.link.url} target="_blank" rel="noreferrer">
+        🔗 {att.link.title}
+      </a>
+    )
   }
   return null
 }
@@ -52,6 +62,10 @@ function CourseWorkCard({ item }: { item: CourseWorkWithSubmission }) {
   const { courseWork, submission } = item
   const { label, variant } = stateLabel(submission?.state)
 
+  // ✅ FIX: ambil attachments dengan SAFE ACCESS (biar TS nggak error)
+  const attachments =
+    (submission as any)?.assignmentSubmission?.attachments ?? []
+
   return (
     <Card>
       <CardHeader>
@@ -59,16 +73,19 @@ function CourseWorkCard({ item }: { item: CourseWorkWithSubmission }) {
         <Badge variant={variant}>{label}</Badge>
         <CardDescription>{formatDueDate(courseWork.dueDate)}</CardDescription>
       </CardHeader>
+
       <CardContent>
         {courseWork.description}
 
-        {/* ✅ FIX DI SINI */}
-        {submission?.assignmentSubmission?.attachments?.map(
-          (att: SubmissionAttachmentItem, i: number) => (
-            <div key={i}>
-              <AttachmentLink att={att} />
-            </div>
-          )
+        {/* ✅ Attachments */}
+        {attachments.length > 0 && (
+          <div style={{ marginTop: "10px" }}>
+            {attachments.map((att: SubmissionAttachmentItem, i: number) => (
+              <div key={i}>
+                <AttachmentLink att={att} />
+              </div>
+            ))}
+          </div>
         )}
       </CardContent>
     </Card>
@@ -87,10 +104,10 @@ export default function App() {
   // ✅ cek login
   useEffect(() => {
     fetch(`${BASE_URL}/auth/me`, {
-      credentials: "include"
+      credentials: "include",
     })
-      .then(r => r.json())
-      .then(d => setLoggedIn(d.loggedIn))
+      .then((r) => r.json())
+      .then((d) => setLoggedIn(d.loggedIn))
       .catch(() => setLoggedIn(false))
   }, [])
 
@@ -98,10 +115,10 @@ export default function App() {
   useEffect(() => {
     if (!loggedIn) return
     fetch(`${BASE_URL}/classroom/courses`, {
-      credentials: "include"
+      credentials: "include",
     })
-      .then(r => r.json())
-      .then(d => setCourses(d.data ?? []))
+      .then((r) => r.json())
+      .then((d) => setCourses(d.data ?? []))
   }, [loggedIn])
 
   const loadSubmissions = async (courseId: string) => {
@@ -120,7 +137,7 @@ export default function App() {
   const handleLogout = async () => {
     await fetch(`${BASE_URL}/auth/logout`, {
       method: "POST",
-      credentials: "include"
+      credentials: "include",
     })
     setLoggedIn(false)
   }
@@ -141,15 +158,21 @@ export default function App() {
       <h1>Classroom</h1>
       <Button onClick={handleLogout}>Logout</Button>
 
-      {courses.map(c => (
-        <Button key={c.id} onClick={() => loadSubmissions(c.id)}>
-          {c.name}
-        </Button>
-      ))}
+      {/* Courses */}
+      <div style={{ marginTop: "10px" }}>
+        {courses.map((c) => (
+          <Button key={c.id} onClick={() => loadSubmissions(c.id)}>
+            {c.name}
+          </Button>
+        ))}
+      </div>
 
-      {items.map(item => (
-        <CourseWorkCard key={item.courseWork.id} item={item} />
-      ))}
+      {/* Coursework */}
+      <div style={{ marginTop: "20px" }}>
+        {items.map((item) => (
+          <CourseWorkCard key={item.courseWork.id} item={item} />
+        ))}
+      </div>
     </div>
   )
 }
