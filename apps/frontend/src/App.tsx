@@ -1,33 +1,16 @@
-import { Button } from "@/components/ui/button"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import DefaultApp from "./App2";
+import ClassroomApp from "./App3";
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 min-h-screen">
-      
-      <Button>Default</Button>
-
-      <Button variant="secondary">
-        Secondary
-      </Button>
-
-      <Button variant="destructive">
-        Delete
-      </Button>
-
-      <Button variant="outline">
-        Outline
-      </Button>
-
-      <Button variant="ghost">
-        Ghost
-      </Button>
-
-      <Button variant="link">
-        Link
-      </Button>
-
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DefaultApp />} />
+        <Route path="/classroom" element={<ClassroomApp />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
