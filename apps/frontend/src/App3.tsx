@@ -2,6 +2,13 @@ import { useEffect, useState } from "react"
 import type { Course, CourseWorkWithSubmission } from "shared"
 
 import { Button } from "@/components/ui/button"
+
+type SubmissionAttachmentItem = {
+  driveFile?: { alternateLink: string; title: string }
+  link?: { url: string; title?: string }
+  youtubeVideo?: { alternateLink: string; title: string }
+  form?: { formUrl: string; responseUrl: string; title: string }
+}
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -119,7 +126,7 @@ function CourseWorkCard({ item }: { item: CourseWorkWithSubmission }) {
               <p className="text-xs font-semibold text-muted-foreground">LAMPIRAN TUGAS</p>
               <div className="flex flex-col gap-1">
                 {courseWork.materials.map((mat, i) => {
-                  const att: SubmissionAttachmentItem = {
+                  const att:  SubmissionAttachmentItem = {
                     driveFile: mat.driveFile?.driveFile,
                     link: mat.link,
                     youtubeVideo: mat.youtubeVideo,
