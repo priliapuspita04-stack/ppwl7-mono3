@@ -1,6 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "bunVersion": "1.x",
   "installCommand": "bun install",
+  "buildCommand": "prisma generate && tsdown",
   "outputDirectory": "dist",
   "routes": [
     { "src": "/classroom", "dest": "/" }
